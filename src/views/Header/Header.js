@@ -330,16 +330,32 @@ class Header extends React.PureComponent<Props, State> {
       headerStyle,
     ];
 
-    return (
-      <Animated.View {...rest}>
-        <SafeAreaView
-          style={containerStyles}
-          forceInset={{ top: 'never', bottom: 'never' }}
-        >
-          <View style={styles.appBar}>{appBar}</View>
-        </SafeAreaView>
-      </Animated.View>
-    );
+    if (Platform.OS === 'android') {
+      return (
+        <Animated.View {...rest}>
+          <SafeAreaView
+            style={containerStyles}
+            forceInset={{top: 'never', bottom: 'never'}}
+          >
+            <View style={styles.appBar}>{appBar}</View>
+          </SafeAreaView>
+        </Animated.View>
+      );
+    }
+    else {
+      const majorVersionIOS = parseInt(Platform.Version, 10);
+
+      return (
+        <Animated.View {...rest}>
+          <SafeAreaView
+            style={containerStyles}
+            forceInset={{top: majorVersionIOS <= 10 ? 'always' : 'never', bottom: 'never'}}
+          >
+            <View style={styles.appBar}>{appBar}</View>
+          </SafeAreaView>
+        </Animated.View>
+      );
+    }
   }
 }
 
